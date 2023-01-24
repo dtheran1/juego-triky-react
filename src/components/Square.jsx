@@ -1,5 +1,5 @@
 export const Square = ({ children, updateBoard, index, isSelected }) => {
-  const className = `square ${isSelected && 'is-selected'}`;
+  const className = `square ${isSelected && 'is-selected'}`
 
   const handleClick = () => {
     updateBoard(index)
@@ -10,4 +10,4 @@ export const Square = ({ children, updateBoard, index, isSelected }) => {
       {children}
     </div>
   )
-};
+}
