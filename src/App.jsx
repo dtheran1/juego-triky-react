@@ -1,64 +1,21 @@
 import { useState } from "react";
+import confetti from "canvas-confetti";
 
-const TURNS = {
-  X: 'x',
-  O: 'o'
-}
-
-
-const Square = ({ children, updateBoard, index, isSelected }) => {
-  const className = `square ${isSelected && 'is-selected'}`;
-
-  const handleClick = () => {
-    updateBoard(index)
-  }
-
-  return (
-    <div onClick={handleClick} className={className}>
-      {children}
-    </div>
-  )
-};
-
-const WINNER_COMBOS = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6],
-];
+import { Square } from "./components/Square";
+import { TURNS } from "./constants";
+import { checkWinner, checkEndGame } from "./logic/board";
+import { WinnerModal } from "./components/WinnerModal";
+import { Board } from "./components/Board";
 
 function App() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [turn, setTurn] = useState(TURNS.X);
   const [winner, setWinner] = useState(null); // null es que no hay ganador, false es que hay empate
 
-  const checkWinner = (boardToCheck) => {
-    // Revisamos todas las combinaciones para ver si hay un ganador
-    for (const combo of WINNER_COMBOS) {
-      const [a, b, c] = combo
-      if (
-        boardToCheck[a] &&
-        boardToCheck[a] === boardToCheck[b] &&
-        boardToCheck[a] === boardToCheck[c]
-      ) {
-        return boardToCheck[a]
-      }
-    }
-    return null
-  };
-
   const resetGame = () => {
     setBoard(Array(9).fill(null));
     setTurn(TURNS.X);
     setWinner(null);
-  }
-
-  const checkEndGame = (boardToCheck) => {
-    return boardToCheck.every(square => square !== null)
   }
 
   const updateBoard = (ind) => {
@@ -76,6 +33,7 @@ function App() {
     //Revisar si hay un ganador
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
+      confetti();
       setWinner(newWinner);
     } else if (checkEndGame(newBoard)) {
       setWinner(false) // empate
@@ -86,21 +44,7 @@ function App() {
     <main className="board">
       <h1>Tic Tac Toe</h1>
       <button onClick={resetGame}>Resetear juego</button>
-      <section className="game">
-        {
-          board.map((square, ind) => {
-            return (
-              <Square
-                key={ind}
-                index={ind}
-                updateBoard={updateBoard}
-              >
-                {square}
-              </Square>
-            )
-          })
-        }
-      </section>
+      <Board board={board} updateBoard={updateBoard} />
 
       <section className="turn">
         <Square isSelected={turn === TURNS.X}>
@@ -111,31 +55,7 @@ function App() {
         </Square>
       </section>
 
-      {
-        winner !== null && (
-          <section className="winner">
-            <div className="text">
-              <h2>
-                {
-                  winner === false
-                    ? 'Empate'
-                    : `Gano:`
-                }
-              </h2>
-              <header className="win">
-                {
-                  winner && <Square>{winner}</Square>
-                }
-              </header>
-              <footer>
-                <button onClick={resetGame}>
-                  Empezar de nuevo
-                </button>
-              </footer>
-            </div>
-          </section>
-        )
-      }
+      <WinnerModal winner={winner} resetGame={resetGame} />
 
     </main>
   )
