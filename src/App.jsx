@@ -6,6 +6,7 @@ import { TURNS } from "./constants";
 import { checkWinner, checkEndGame } from "./logic/board";
 import { WinnerModal } from "./components/WinnerModal";
 import { Board } from "./components/Board";
+import { resetGameToStorage, saveGameToStorage } from "./logic/storage";
 
 function App() {
   //El estado en React es asincrono IMPORTANTE
@@ -27,8 +28,7 @@ function App() {
     setTurn(TURNS.X);
     setWinner(null);
 
-    window.localStorage.removeItem("turn");
-    window.localStorage.removeItem("board");
+    resetGameToStorage();
   }
 
   const updateBoard = (ind) => {
@@ -43,8 +43,7 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
     // guardar partida
-    window.localStorage.setItem('board', JSON.stringify(newBoard));
-    window.localStorage.setItem('turn', newTurn);
+    saveGameToStorage({board: newBoard, turn: newTurn})
 
     //Revisar si hay un ganador
     const newWinner = checkWinner(newBoard);
