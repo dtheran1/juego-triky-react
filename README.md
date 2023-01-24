@@ -1,3 +1,3 @@
 # juego-triky-react
 
-![image](https://user-images.githubusercontent.com/83596975/214197381-ee192289-2e1f-4a2b-bd73-30a2a28bb7c3.png)
+![image](https://user-images.githubusercontent.com/83596975/214201040-256ef2a8-2e23-44e6-9f24-7f79d62d2b64.png)
