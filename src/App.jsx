@@ -8,6 +8,7 @@ import { WinnerModal } from "./components/WinnerModal";
 import { Board } from "./components/Board";
 
 function App() {
+  //El estado en React es asincrono IMPORTANTE
   const [board, setBoard] = useState(() => {
     // inicializando el estado con una callback
     const boardFromStorage = window.localStorage.getItem("board");
